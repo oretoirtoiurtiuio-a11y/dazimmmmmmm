@@ -27,7 +27,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainApp() {
     Scaffold(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        contentWindowInsets = WindowInsets(0, 0, 0, 0) // Handle insets manually for full control
     ) { innerPadding ->
         MainScreen(modifier = Modifier.padding(innerPadding))
     }

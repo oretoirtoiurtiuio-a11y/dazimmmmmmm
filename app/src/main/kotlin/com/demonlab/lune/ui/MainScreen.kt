@@ -29,6 +29,9 @@ import com.demonlab.lune.ui.theme.*
 import com.demonlab.lune.core.rememberPerformanceMode
 import com.demonlab.lune.core.PerformanceMode
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     val performanceMode = rememberPerformanceMode()
@@ -37,7 +40,12 @@ fun MainScreen(modifier: Modifier = Modifier) {
     var currentTab by remember { mutableStateOf(0) }
     var isPlayerExpanded by remember { mutableStateOf(false) }
     
-    Box(modifier = modifier.fillMaxSize().background(DazaiBlack)) {
+    // Manage root container to handle bottom navigation and miniplayer visibility
+    Box(modifier = modifier
+        .fillMaxSize()
+        .background(DazaiBlack)
+        .statusBarsPadding()
+    ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // Content Area
             Box(modifier = Modifier.weight(1f)) {
@@ -47,23 +55,47 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 }
             }
             
-            // Bottom Mini Player
-            MiniPlayer(onClick = { isPlayerExpanded = true })
-            
-            // Navigation Bar
-            NavigationBar {
-                NavigationBarItem(
-                    selected = currentTab == 0,
-                    onClick = { currentTab = 0 },
-                    icon = { Icon(Icons.Default.List, contentDescription = null) },
-                    label = { Text(stringResource(R.string.library)) }
-                )
-                NavigationBarItem(
-                    selected = currentTab == 1,
-                    onClick = { currentTab = 1 },
-                    icon = { Icon(Icons.Default.Settings, contentDescription = null) },
-                    label = { Text(stringResource(R.string.settings)) }
-                )
+            // Player and Navigation Section - Protected from Navigation Bar Overlap
+            Surface(
+                color = DazaiBlack.copy(alpha = 0.95f),
+                modifier = Modifier.navigationBarsPadding()
+            ) {
+                Column {
+                    MiniPlayer(onClick = { isPlayerExpanded = true })
+                    
+                    NavigationBar(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.White,
+                        tonalElevation = 0.dp
+                    ) {
+                        NavigationBarItem(
+                            selected = currentTab == 0,
+                            onClick = { currentTab = 0 },
+                            icon = { Icon(Icons.Default.List, contentDescription = null) },
+                            label = { Text(stringResource(R.string.library)) },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = DazaiBlue,
+                                selectedTextColor = DazaiBlue,
+                                indicatorColor = DazaiBlue.copy(alpha = 0.1f),
+                                unselectedIconColor = DazaiGrayMuted,
+                                unselectedTextColor = DazaiGrayMuted
+                            )
+                        )
+                        NavigationBarItem(
+                            selected = currentTab == 1,
+                            onClick = { currentTab = 1 },
+                            icon = { Icon(Icons.Default.Settings, contentDescription = null) },
+                            label = { Text(stringResource(R.string.settings)) },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = DazaiBlue,
+                                selectedTextColor = DazaiBlue,
+                                indicatorColor = DazaiBlue.copy(alpha = 0.1f),
+                                unselectedIconColor = DazaiGrayMuted,
+                                unselectedTextColor = DazaiGrayMuted
+                            )
+                        )
+                    }
+                }
             }
         }
 
@@ -97,7 +129,6 @@ fun MiniPlayer(onClick: () -> Unit) {
                 .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Mini Artwork with soft neon glow
             Surface(
                 modifier = Modifier.size(48.dp),
                 shape = RoundedCornerShape(12.dp),
@@ -113,7 +144,6 @@ fun MiniPlayer(onClick: () -> Unit) {
             
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Song Info
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = "مقطوعة ضوء القمر",
@@ -177,7 +207,12 @@ fun SongItemPlaceholder() {
 
 @Composable
 fun SettingsScreen() {
-    Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
         Text(
             text = stringResource(R.string.settings),
             style = MaterialTheme.typography.headlineMedium,
@@ -186,9 +221,75 @@ fun SettingsScreen() {
         )
         Spacer(modifier = Modifier.height(32.dp))
         
+        SettingHeader(stringResource(R.string.about_developer))
+        
+        AboutDeveloperCard()
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
         SettingItem(stringResource(R.string.developer_info), stringResource(R.string.developer_name))
         SettingItem("إصدار التطبيق", "1.0.0 (Dazai Soul)")
     }
+}
+
+@Composable
+fun AboutDeveloperCard() {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp),
+        shape = RoundedCornerShape(24.dp),
+        color = DazaiSurface,
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Surface(
+                modifier = Modifier.size(64.dp),
+                shape = CircleShape,
+                color = DazaiBlue.copy(alpha = 0.1f),
+                border = BorderStroke(2.dp, DazaiBlue)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Text(
+                        "D", 
+                        style = MaterialTheme.typography.headlineMedium, 
+                        color = DazaiBlue,
+                        fontWeight = FontWeight.Black
+                    )
+                }
+            }
+            
+            Spacer(modifier = Modifier.width(16.dp))
+            
+            Column {
+                Text(
+                    text = "Mohammad Haider",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "@haiderbyte | Dazai Engine",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = DazaiBlueLight
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SettingHeader(title: String) {
+    Text(
+        text = title,
+        style = MaterialTheme.typography.labelLarge,
+        color = DazaiBlue,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.padding(bottom = 8.dp)
+    )
 }
 
 @Composable
@@ -197,6 +298,6 @@ fun SettingItem(title: String, desc: String) {
         Text(title, style = MaterialTheme.typography.titleMedium, color = Color.White)
         Text(desc, style = MaterialTheme.typography.bodySmall, color = DazaiGrayMuted)
         Spacer(modifier = Modifier.height(12.dp))
-        Divider(color = Color.White.copy(alpha = 0.05f))
+        HorizontalDivider(color = Color.White.copy(alpha = 0.05f))
     }
 }

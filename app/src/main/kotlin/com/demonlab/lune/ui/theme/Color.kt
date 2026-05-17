@@ -16,6 +16,7 @@ val DazaiBlueLight = Color(0xFF60A5FA)
 val DazaiWhite = Color(0xFFFFFFFF)
 val DazaiGrayLight = Color(0xFFD1D5DB)
 val DazaiGrayMuted = Color(0xFF94A3B8)
+val AMOLEDBlack = Color(0xFF000000)
 
 // Translucent / Glass
 val DazaiGlass = Color(0x1AFFFFFF)
