@@ -1,0 +1,11 @@
+{
+  "name": "Remix: Dazai Player",
+  "description": "A premium, enterprise-grade Android music player inspired by Lune, featuring Material 3 Expressive design, Media3, Room, and advanced audio features like crossfade and RTL support.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

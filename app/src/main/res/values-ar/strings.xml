@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">دزاي بلير</string>
+    <string name="play">تشغيل</string>
+    <string name="pause">إيقاف مؤقت</string>
+    <string name="library">عالمك الموسيقي</string>
+    <string name="albums">مجموعات الألحان</string>
+    <string name="artists">الأرواح المبدعة</string>
+    <string name="settings">تخصيص التجربة</string>
+    <string name="equalizer">أثير الصوت</string>
+    <string name="sleep_timer">لحظة السكون</string>
+    <string name="queue">الألحان القادمة</string>
+    <string name="developer_info">عن صانع هذا العمل</string>
+    <string name="now_playing">يُعزف الآن في وجدانك</string>
+    <string name="about_developer">حول المطور</string>
+    <string name="developer_name">محمد حيدر (دزاي)</string>
+    <string name="lyrics">كلمات الأغاني</string>
+    <string name="playback_speed">سرعة التشغيل</string>
+</resources>
